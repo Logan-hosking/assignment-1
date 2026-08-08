@@ -1,10 +1,12 @@
 export default function About() {
   return (
-    <div className="max-w-4xl mx-auto">
-      <h1 className="text-4xl font-bold">About</h1>
+    <div className="container-page">
+      <h1 className="text-4xl font-bold">
+        About
+      </h1>
 
       <section className="mt-8">
-        <h2 className="text-2xl font-bold">
+        <h2 className="section-title">
           About the Project
         </h2>
 
@@ -27,12 +29,12 @@ export default function About() {
       </section>
 
       <section className="mt-10">
-        <h2 className="text-2xl font-bold">
+        <h2 className="section-title">
           Activity Tools
         </h2>
 
         <div className="grid md:grid-cols-2 gap-6 mt-5">
-          <div className="border rounded-xl p-6">
+          <div className="card">
             <h3 className="text-xl font-bold">
               Wordle
             </h3>
@@ -44,7 +46,7 @@ export default function About() {
             </p>
           </div>
 
-          <div className="border rounded-xl p-6">
+          <div className="card">
             <h3 className="text-xl font-bold">
               Word Search
             </h3>
@@ -58,11 +60,57 @@ export default function About() {
       </section>
 
       <section className="mt-10">
-        <h2 className="text-2xl font-bold">
+        <h2 className="section-title">
+          Accessibility and Design Decisions
+        </h2>
+
+        <div className="card mt-4">
+          <p>
+            Accessibility and usability were considered throughout
+            the frontend design of the application.
+          </p>
+
+          <ul className="list-disc ml-6 mt-4 space-y-2">
+            <li>
+              Clear headings and labels are used to make each page
+              easier to understand and navigate.
+            </li>
+
+            <li>
+              Interactive controls can be reached using keyboard
+              navigation and include visible focus indicators.
+            </li>
+
+            <li>
+              Phoneme buttons provide explanatory hints to help users
+              understand the relationship between phoneme symbols and
+              familiar English sounds.
+            </li>
+
+            <li>
+              Responsive layouts are used so the interface remains
+              usable on desktop and smaller screens.
+            </li>
+
+            <li>
+              Light and dark theme options allow users to customise
+              the visual appearance of the interface.
+            </li>
+
+            <li>
+              Activity previews allow teachers to review settings
+              before generating the final standalone HTML activity.
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section className="mt-10">
+        <h2 className="section-title">
           Student Information
         </h2>
 
-        <div className="mt-4 border rounded-xl p-6">
+        <div className="card mt-4">
           <p>
             <strong>Name:</strong> Logan Hosking
           </p>
@@ -74,7 +122,7 @@ export default function About() {
       </section>
 
       <section className="mt-10">
-        <h2 className="text-2xl font-bold">
+        <h2 className="section-title">
           Demonstration Video
         </h2>
 
@@ -82,7 +130,7 @@ export default function About() {
           This video demonstrates how to use the Phoneme Activity Builder.
         </p>
 
-        <div className="mt-5 border rounded-xl p-6">
+        <div className="card mt-5">
           <video
             controls
             className="w-full rounded-lg"
