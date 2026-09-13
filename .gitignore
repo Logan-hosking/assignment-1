@@ -42,3 +42,4 @@ next-env.d.ts
 
 # assessment videos
 /public/video/
+/app/generated/prisma

@@ -1,0 +1,64 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+enum ActivityType {
+  WORDLE
+  WORD_SEARCH
+}
+
+enum Difficulty {
+  EASY
+  MEDIUM
+  HARD
+}
+
+model Activity {
+  id          Int          @id @default(autoincrement())
+  name        String
+  type        ActivityType
+  difficulty  Difficulty
+  hint        String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  wordListId  Int?
+  wordList    WordList?    @relation(fields: [wordListId], references: [id])
+}
+
+model WordList {
+  id          Int          @id @default(autoincrement())
+  name        String
+  description String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  words       Word[]
+  activities  Activity[]
+}
+
+model Word {
+  id          Int          @id @default(autoincrement())
+  english     String
+  hint        String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  wordListId  Int
+  wordList    WordList     @relation(fields: [wordListId], references: [id], onDelete: Cascade)
+
+  phonemes    Phoneme[]
+}
+
+model Phoneme {
+  id          Int      @id @default(autoincrement())
+  symbol      String
+  position    Int
+
+  wordId      Int
+  word        Word     @relation(fields: [wordId], references: [id], onDelete: Cascade)
+}
