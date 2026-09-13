@@ -23,29 +23,55 @@ export default function Navbar() {
             ☰
           </button>
 
+          {/* Desktop Menu */}
           <div className="hidden md:flex gap-6">
             <Link href="/wordle">Wordle</Link>
             <Link href="/wordsearch">Word Search</Link>
+            <Link href="/manage">Manage Words</Link>
+            <Link href="/manage-activities">
+              Manage Activities
+            </Link>
             <Link href="/about">About</Link>
             <Link href="/settings">Settings</Link>
           </div>
         </div>
 
+        {/* Mobile Menu */}
         {open && (
           <div className="flex flex-col gap-3 mt-4 md:hidden">
             <Link href="/wordle" onClick={() => setOpen(false)}>
               Wordle
             </Link>
 
-            <Link href="/wordsearch" onClick={() => setOpen(false)}>
+            <Link
+              href="/wordsearch"
+              onClick={() => setOpen(false)}
+            >
               Word Search
+            </Link>
+
+            <Link
+              href="/manage"
+              onClick={() => setOpen(false)}
+            >
+              Manage Words
+            </Link>
+
+            <Link
+              href="/manage-activities"
+              onClick={() => setOpen(false)}
+            >
+              Manage Activities
             </Link>
 
             <Link href="/about" onClick={() => setOpen(false)}>
               About
             </Link>
 
-            <Link href="/settings" onClick={() => setOpen(false)}>
+            <Link
+              href="/settings"
+              onClick={() => setOpen(false)}
+            >
               Settings
             </Link>
           </div>

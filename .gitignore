@@ -43,3 +43,10 @@ next-env.d.ts
 # assessment videos
 /public/video/
 /app/generated/prisma
+
+.agents/
+.claude/
+.cursor/
+.devin/
+.windsurf/
+skills-lock.json
