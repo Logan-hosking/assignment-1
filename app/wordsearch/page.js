@@ -10,6 +10,7 @@ export default function WordSearch() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  // Load stored words
   useEffect(() => {
     async function loadWords() {
       try {
@@ -32,6 +33,43 @@ export default function WordSearch() {
     loadWords();
   }, []);
 
+  // Track time spent on the Word Search page
+  useEffect(() => {
+    const startTime = Date.now();
+
+    function recordPageVisit() {
+      const durationMs = Date.now() - startTime;
+
+      const data = JSON.stringify({
+        page: "/wordsearch",
+        durationMs,
+      });
+
+      const blob = new Blob([data], {
+        type: "application/json",
+      });
+
+      navigator.sendBeacon(
+        "/api/page-visit",
+        blob
+      );
+    }
+
+    window.addEventListener(
+      "beforeunload",
+      recordPageVisit
+    );
+
+    return () => {
+      window.removeEventListener(
+        "beforeunload",
+        recordPageVisit
+      );
+
+      recordPageVisit();
+    };
+  }, []);
+
   const phonemeWords = words.map(
     (word) =>
       `/${word.phonemes
@@ -50,6 +88,47 @@ export default function WordSearch() {
     "tʃ", "eə", "θ", "ʊ", "n",
     "b", "ʊ", "k", "ɪ", "ʃ",
   ];
+
+  async function handleGenerate() {
+    try {
+      generateWordSearchHTML({
+        words: phonemeWords,
+        difficulty: difficulty,
+      });
+
+      const response = await fetch(
+        "/api/generation-log",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            activityType: "WORD_SEARCH",
+            success: true,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(
+          "Unable to record successful generation."
+        );
+      }
+    } catch (error) {
+      await fetch("/api/generation-log", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          activityType: "WORD_SEARCH",
+          success: false,
+          errorMessage: error.message,
+        }),
+      });
+    }
+  }
 
   return (
     <div className="container-page">
@@ -216,12 +295,7 @@ export default function WordSearch() {
         <button
           type="button"
           disabled={loading || error || words.length === 0}
-          onClick={() =>
-            generateWordSearchHTML({
-              words: phonemeWords,
-              difficulty: difficulty,
-            })
-          }
+          onClick={handleGenerate}
           className="primary-button"
         >
           Generate HTML

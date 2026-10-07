@@ -41,6 +41,7 @@ export default function Wordle() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  // Load stored words from the database
   useEffect(() => {
     async function loadWords() {
       try {
@@ -67,6 +68,43 @@ export default function Wordle() {
     loadWords();
   }, []);
 
+  // Track time spent on the Wordle page
+  useEffect(() => {
+    const startTime = Date.now();
+
+    function recordPageVisit() {
+      const durationMs = Date.now() - startTime;
+
+      const data = JSON.stringify({
+        page: "/wordle",
+        durationMs,
+      });
+
+      const blob = new Blob([data], {
+        type: "application/json",
+      });
+
+      navigator.sendBeacon(
+        "/api/page-visit",
+        blob
+      );
+    }
+
+    window.addEventListener(
+      "beforeunload",
+      recordPageVisit
+    );
+
+    return () => {
+      window.removeEventListener(
+        "beforeunload",
+        recordPageVisit
+      );
+
+      recordPageVisit();
+    };
+  }, []);
+
   const selectedWord = words.find(
     (word) => String(word.id) === selectedWordId
   );
@@ -76,6 +114,48 @@ export default function Wordle() {
         .map((phoneme) => phoneme.symbol)
         .join("")}/`
     : "";
+
+  async function handleGenerate() {
+    try {
+      generateWordleHTML({
+        phonemeWord,
+        english: selectedWord?.english || "",
+        difficulty,
+      });
+
+      const response = await fetch(
+        "/api/generation-log",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            activityType: "WORDLE",
+            success: true,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(
+          "Unable to record successful generation."
+        );
+      }
+    } catch (error) {
+      await fetch("/api/generation-log", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          activityType: "WORDLE",
+          success: false,
+          errorMessage: error.message,
+        }),
+      });
+    }
+  }
 
   return (
     <div className="container-page">
@@ -139,22 +219,32 @@ export default function Wordle() {
         )}
 
         {!loading && !error && words.length > 0 && (
-          <select
-            value={selectedWordId}
-            onChange={(event) =>
-              setSelectedWordId(event.target.value)
-            }
-            className="border rounded-lg p-3 mt-3"
-          >
-            {words.map((word) => (
-              <option
-                key={word.id}
-                value={word.id}
-              >
-                {word.english}
-              </option>
-            ))}
-          </select>
+          <>
+            <label
+              htmlFor="stored-word"
+              className="block mt-3 font-semibold"
+            >
+              Select stored word
+            </label>
+
+            <select
+              id="stored-word"
+              value={selectedWordId}
+              onChange={(event) =>
+                setSelectedWordId(event.target.value)
+              }
+              className="border rounded-lg p-3 mt-2"
+            >
+              {words.map((word) => (
+                <option
+                  key={word.id}
+                  value={word.id}
+                >
+                  {word.english}
+                </option>
+              ))}
+            </select>
+          </>
         )}
       </section>
 
@@ -172,13 +262,17 @@ export default function Wordle() {
 
             <p className="mt-2">
               English equivalent:{" "}
-              <strong>{selectedWord.english}</strong>
+              <strong>
+                {selectedWord.english}
+              </strong>
             </p>
 
             {selectedWord.hint && (
               <p className="mt-2">
                 Hint:{" "}
-                <strong>{selectedWord.hint}</strong>
+                <strong>
+                  {selectedWord.hint}
+                </strong>
               </p>
             )}
           </div>
@@ -206,9 +300,17 @@ export default function Wordle() {
           }
           className="border rounded-lg p-3 mt-2"
         >
-          <option value="Easy">Easy</option>
-          <option value="Medium">Medium</option>
-          <option value="Hard">Hard</option>
+          <option value="Easy">
+            Easy
+          </option>
+
+          <option value="Medium">
+            Medium
+          </option>
+
+          <option value="Hard">
+            Hard
+          </option>
         </select>
       </section>
 
@@ -231,7 +333,6 @@ export default function Wordle() {
             </p>
 
             <div className="mt-6 text-center">
-
               {difficulty === "Easy" && (
                 <>
                   <p>
@@ -311,13 +412,7 @@ export default function Wordle() {
         <button
           type="button"
           disabled={!selectedWord}
-          onClick={() =>
-            generateWordleHTML({
-              phonemeWord: phonemeWord,
-              english: selectedWord?.english || "",
-              difficulty: difficulty,
-            })
-          }
+          onClick={handleGenerate}
           className="primary-button"
         >
           Generate HTML

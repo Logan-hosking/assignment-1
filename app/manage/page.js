@@ -122,11 +122,15 @@ export default function ManageWords() {
           onSubmit={handleSubmit}
           className="card mt-4"
         >
-          <label className="block font-semibold">
+          <label
+            htmlFor="english-word"
+            className="block font-semibold"
+          >
             English word
           </label>
 
           <input
+            id="english-word"
             type="text"
             value={english}
             onChange={(event) =>
@@ -136,11 +140,15 @@ export default function ManageWords() {
             required
           />
 
-          <label className="block font-semibold mt-4">
+          <label
+            htmlFor="word-hint"
+            className="block font-semibold mt-4"
+          >
             Hint
           </label>
 
           <input
+            id="word-hint"
             type="text"
             value={hint}
             onChange={(event) =>
@@ -149,11 +157,15 @@ export default function ManageWords() {
             className="border rounded-lg p-3 mt-2 w-full"
           />
 
-          <label className="block font-semibold mt-4">
+          <label
+            htmlFor="word-phonemes"
+            className="block font-semibold mt-4"
+          >
             Phonemes
           </label>
 
           <input
+            id="word-phonemes"
             type="text"
             value={phonemes}
             onChange={(event) =>

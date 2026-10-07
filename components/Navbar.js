@@ -27,6 +27,7 @@ export default function Navbar() {
           <div className="hidden md:flex gap-6">
             <Link href="/wordle">Wordle</Link>
             <Link href="/wordsearch">Word Search</Link>
+            <Link href="/dashboard">Dashboard</Link>
             <Link href="/manage">Manage Words</Link>
             <Link href="/manage-activities">
               Manage Activities
@@ -39,7 +40,10 @@ export default function Navbar() {
         {/* Mobile Menu */}
         {open && (
           <div className="flex flex-col gap-3 mt-4 md:hidden">
-            <Link href="/wordle" onClick={() => setOpen(false)}>
+            <Link
+              href="/wordle"
+              onClick={() => setOpen(false)}
+            >
               Wordle
             </Link>
 
@@ -48,6 +52,13 @@ export default function Navbar() {
               onClick={() => setOpen(false)}
             >
               Word Search
+            </Link>
+
+            <Link
+              href="/dashboard"
+              onClick={() => setOpen(false)}
+            >
+              Dashboard
             </Link>
 
             <Link
@@ -64,7 +75,10 @@ export default function Navbar() {
               Manage Activities
             </Link>
 
-            <Link href="/about" onClick={() => setOpen(false)}>
+            <Link
+              href="/about"
+              onClick={() => setOpen(false)}
+            >
               About
             </Link>
 

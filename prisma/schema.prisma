@@ -62,3 +62,18 @@ model Phoneme {
   wordId      Int
   word        Word     @relation(fields: [wordId], references: [id], onDelete: Cascade)
 }
+model GenerationLog {
+  id           Int          @id @default(autoincrement())
+  activityType ActivityType
+  success      Boolean
+  errorMessage String?
+  activityId   Int?
+  createdAt    DateTime     @default(now())
+}
+
+model PageVisit {
+  id         Int      @id @default(autoincrement())
+  page       String
+  durationMs Int
+  createdAt  DateTime @default(now())
+}

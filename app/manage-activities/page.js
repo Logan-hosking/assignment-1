@@ -148,11 +148,15 @@ export default function ManageActivities() {
           onSubmit={handleSubmit}
           className="card mt-4"
         >
-          <label className="block font-semibold">
+          <label
+            htmlFor="activity-name"
+            className="block font-semibold"
+          >
             Activity name
           </label>
 
           <input
+            id="activity-name"
             type="text"
             value={name}
             onChange={(event) =>
@@ -162,11 +166,15 @@ export default function ManageActivities() {
             required
           />
 
-          <label className="block font-semibold mt-4">
+          <label
+            htmlFor="activity-type"
+            className="block font-semibold mt-4"
+          >
             Activity type
           </label>
 
           <select
+            id="activity-type"
             value={type}
             onChange={(event) =>
               setType(event.target.value)
@@ -182,11 +190,15 @@ export default function ManageActivities() {
             </option>
           </select>
 
-          <label className="block font-semibold mt-4">
+          <label
+            htmlFor="activity-difficulty"
+            className="block font-semibold mt-4"
+          >
             Difficulty
           </label>
 
           <select
+            id="activity-difficulty"
             value={difficulty}
             onChange={(event) =>
               setDifficulty(event.target.value)
@@ -206,11 +218,15 @@ export default function ManageActivities() {
             </option>
           </select>
 
-          <label className="block font-semibold mt-4">
+          <label
+            htmlFor="activity-hint"
+            className="block font-semibold mt-4"
+          >
             Hint / activity guidance
           </label>
 
           <input
+            id="activity-hint"
             type="text"
             value={hint}
             onChange={(event) =>
@@ -219,11 +235,15 @@ export default function ManageActivities() {
             className="border rounded-lg p-3 mt-2 w-full"
           />
 
-          <label className="block font-semibold mt-4">
+          <label
+            htmlFor="activity-word-list"
+            className="block font-semibold mt-4"
+          >
             Word list
           </label>
 
           <select
+            id="activity-word-list"
             value={wordListId}
             onChange={(event) =>
               setWordListId(event.target.value)
